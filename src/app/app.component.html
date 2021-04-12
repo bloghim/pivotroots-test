@@ -1,0 +1,202 @@
+<div class="container mt-5">
+  <div class="row align-items-center">
+    <div class="col-12">
+      <small class="legend ms-5 me-5"
+        >Guaranteed Higher Scores! Only with easyMath</small
+      >
+      <div class="outer-wrapper">
+        <div class="inner-wrapper p-5">
+          <ul class="nav nav-pills mb-5" id="pills-tab">
+            <li class="nav-item">
+              <button
+                class="nav-link active"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-home"
+              >
+                Yearly Courses
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-profile"
+              >
+                Monthly Courses
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="pills-home"
+              role="tabpanel"
+              aria-labelledby="pills-home-tab"
+            >
+              <div class="d-md-flex align-items-center mb-5">
+                <div class="mb-3 mb-md-0">
+                  <select (change)="filterYearData($any($event.target).value)">
+                    <option *ngFor="let grade of yearly" [value]="grade.grade">
+                      {{ grade.grade }}
+                    </option>
+                  </select>
+                </div>
+                <ul class="nav nav-pills ms-md-5" id="sub-tab" role="tablist">
+                  <li
+                    class="nav-item"
+                    *ngFor="
+                      let a of yearlyDisplayData?.boards | keyvalue;
+                      let i = index
+                    "
+                  >
+                    <button
+                      [ngClass]="i == 0 ? 'active' : ''"
+                      class="nav-link"
+                      data-bs-toggle="pill"
+                      [attr.data-bs-target]="getTarget(a.key, true)"
+                      type="button"
+                    >
+                      {{ a.key }}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content" id="pills-subtabContent">
+                <div
+                  [id]="getTarget(a.key, false)"
+                  [ngClass]="i == 0 ? 'active' : ''"
+                  class="tab-pane fade show"
+                  *ngFor="
+                    let a of yearlyDisplayData?.boards | keyvalue;
+                    let i = index
+                  "
+                >
+                  <div
+                    class="d-flex flex-wrap justify-content-between year-row"
+                  >
+                    <div class="mb-3 mb-md-0">
+                      Total<br />Sessions<br />
+                      <span class="value">{{
+                        $any(a.value).total_sessions
+                      }}</span>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                      Online Pre<br />Assessments<br />
+                      <span class="value">{{
+                        $any(a.value).online_pre_assignments
+                      }}</span>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                      Online Post<br />Assessments<br />
+                      <span class="value">{{
+                        $any(a.value).online_post_assignments
+                      }}</span>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                      Online<br />Assessments<br />
+                      <span class="value">{{
+                        $any(a.value).online_assignments
+                      }}</span>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                      Online<br />Tests<br />
+                      <span class="value">{{
+                        $any(a.value).online_tests
+                      }}</span>
+                    </div>
+                    <div class="mb-3 mb-md-0">
+                      Career Counselling<br />
+                      Sessions with Edu Coach<br />
+                      <span class="value">{{
+                        $any(a.value).career_counselling_sessions
+                      }}</span>
+                    </div>
+                  </div>
+                  <h4 class="mt-5 mb-3">Cource Topic Include</h4>
+                  <ul class="syllabus-list">
+                    <ng-container *ngIf="$any(a.value).syllabus.length !== 1">
+                      <li *ngFor="let s of $any(a.value).syllabus?.split('!')">
+                        {{ s }}
+                      </li>
+                    </ng-container>
+                  </ul>
+                  <footer class="mt-5 p-5">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        Vacent Seats <span>{{ $any(a.value).seats }} seats</span
+                        ><br />
+                        Not a classroom, but 1:1 sessions.
+                      </div>
+                      <div>
+                        <ng-container *ngIf="$any(a.value).discount == 0">
+                          Subscription Cost: &#8377;{{ $any(a.value).price }}
+                        </ng-container>
+                        <ng-container *ngIf="$any(a.value).discount != 0">
+                          Subscription Cost: &#8377;{{
+                            ($any(a.value).price * $any(a.value).discount) / 100
+                          }}
+                          <small
+                            >&#8377;$any(a.value).price</small
+                          > </ng-container
+                        ><br />
+                        This cost is inclusive of the tablet cost.<br />
+                        Per session cost is &#8377;129.
+                      </div>
+                      <div>
+                        <a href="#">Book Now</a>
+                      </div>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="pills-profile"
+              role="tabpanel"
+              aria-labelledby="pills-profile-tab"
+            >
+              <select
+                class="mb-3"
+                (change)="filterMonthData($any($event.target).value)"
+              >
+                <option *ngFor="let grade of monthly" [value]="grade.grade">
+                  {{ grade.grade }}
+                </option>
+              </select>
+              <div *ngFor="let monthData of monthlyDisplayData">
+                <div
+                  class="d-flex flex-wrap justify-content-md-evenly align-items-center mb-3 month-row p-3"
+                >
+                  <div class="ps-3 pe-3 mb-3 mb-md-0">
+                    <input type="radio" />
+                  </div>
+                  <div class="mb-3 mb-md-0">
+                    {{ monthData.valid }}<br />
+                    <small>{{ monthData.refund }}</small>
+                  </div>
+                  <div class="mb-3 mb-md-0">
+                    <span class="price"
+                      >&#8377;
+                      {{
+                        monthData.price -
+                          (monthData.price * monthData.discount) / 100
+                      }}
+                      <small>&#8377; {{ monthData.price }}</small></span
+                    ><br />
+                    <span class="discount">{{ monthData.discount }}% off</span>
+                  </div>
+                  <div>
+                    &#8377; {{ monthData.per_class_price }} per session<br />
+                    <small>{{ monthData.total_sessions }} sessions</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer></footer>
+      </div>
+    </div>
+  </div>
+</div>
